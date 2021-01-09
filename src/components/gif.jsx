@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 
-class Gif extends Component {
+export default class Gif extends Component {
+
+  handleClick = () => {
+    const {gifId, changeSelectGif } = this.props;
+    changeSelectGif(gifId);
+  }
+
   render() {
-    const src = `https://media1.giphy.com/media/${this.props.id}.gif`;
+    const { gifId } = this.props;
+    const url = `https://media1.giphy.com/media/${gifId}.gif`;
     return(
-      <img src={src} alt="" className="gif" />
+      <img src={url} alt="gif" className="gif" onClick={this.handleClick} />
     );
   }
 }
-
-export default Gif;
