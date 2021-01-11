@@ -1,47 +1,52 @@
 import React, { Component } from 'react';
+import giphy from 'giphy-api';
 
 import SearchBar from './search_bar';
 import Gif from './gif';
 import GifList from './gif_list';
 
-const giphy = require('giphy-api')('bJD6peqj4XR5WD7eCDzVUArNkunKa6fH');
+const GIPHY_API_KEY = 'bJD6peqj4XR5WD7eCDzVUArNkunKa6fH';
 
 class App extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      gifIdList: ["Thosb7jsFUTiU/200w.webp?cid=ecf05e473068ay68s9c8e77b0tci1e3m3rfjsi8gk8six1dw&rid=200w", "s2GqQlfNKIYD9AVFiz/100w.webp?cid=ecf05e47f4ig1mzz10swnwrsjytjpf2t3nw397xz4ijp1cf6&rid=100w", "t9ctG5MZhyyU8/100.webp?cid=ecf05e473068ay68s9c8e77b0tci1e3m3rfjsi8gk8six1dw&rid=100"],
-      gifIdSelected: "JPhJwG1pW4kINV4VTx/200w.webp?cid=ecf05e47qhww7ru1x75nve8sa37bj2cnoavg95p0ahf2n7ly&rid=200w"
+      gifs: [],
+      selectedGifId: "JPhJwG1pW4kINV4VTx/200w.webp?cid=ecf05e47qhww7ru1x75nve8sa37bj2cnoavg95p0ahf2n7ly&rid=200w"
     };
-    this.fetchGiphy("star wars");
   }
 
-  fetchGiphy = (keyword) => {
-    giphy.search({
-      q: keyword,
+  search = (query) => {
+    giphy({api-Key: GIPHY_API_KEY, https:true })
+    .search({
+      q: query,
       rating: 'g',
       limit: 10
-    },  (error, result) => {
-      this.setState({ gifIdList: result.data.map(gif => gif.id) });
+    },  (err, result) => {
+      this.setState({
+        gifs: result.data
+      });
     });
   }
 
-  changeSelectGif = (newSelectedGifId) => {
-    this.setState({ gifIdSelected: newSelectedGifId });
+ selectGif = (id) => {
+    this.setState({
+     selectedGifId: id
+   });
   }
 
   render() {
-    const { gifIdSelected, gifIdList } = this.state;
     return (
       <div>
         <div className="left-scene">
-        <SearchBar fetchGiphy={this.fetchGiphy} />
+        <SearchBar searchFunction={this.search} />
         <div className="selected-gif">
-          <Gif gifId={gifIdSelected} />
+          <Gif id={this.state.selectedGifId} />
         </div>
       </div>
         <div className="right-scene">
-          <GifList gifIdList={gifIdList} chnageSelectGif={this.changeSelectGif} />
+          <GifList gifs={this.state.gifs} selectGif={this.selectGif} />
         </div>
       </div>
     );
