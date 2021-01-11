@@ -13,27 +13,27 @@ class App extends Component {
 
     this.state = {
       gifs: [],
-      selectedGifId: "JPhJwG1pW4kINV4VTx/200w.webp?cid=ecf05e47qhww7ru1x75nve8sa37bj2cnoavg95p0ahf2n7ly&rid=200w"
+      selectedGifId: "xT9IgDEI1iZyb2wqo8"
     };
   }
 
   search = (query) => {
-    giphy({api-Key: GIPHY_API_KEY, https:true })
-    .search({
-      q: query,
-      rating: 'g',
-      limit: 10
-    },  (err, result) => {
-      this.setState({
-        gifs: result.data
+    giphy({ apiKey: GIPHY_API_KEY, https: true })
+      .search({
+        q: query,
+        rating: 'g',
+        limit: 10
+      },  (err, result) => {
+        this.setState({
+          gifs: result.data
+        });
       });
-    });
   }
 
- selectGif = (id) => {
+  selectGif = (id) => {
     this.setState({
-     selectedGifId: id
-   });
+      selectedGifId: id
+    });
   }
 
   render() {
